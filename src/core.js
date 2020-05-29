@@ -22,6 +22,7 @@ function IScroll (el, options) {
 
 		preventDefault: true,
 		preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ },
+		preventNativeScrollTab: true,
 
 		HWCompositing: true,
 		useTransition: true,
@@ -409,7 +410,7 @@ IScroll.prototype = {
 
 		this.hasHorizontalScroll	= this.options.scrollX && this.maxScrollX < 0;
 		this.hasVerticalScroll		= this.options.scrollY && this.maxScrollY < 0;
-		
+
 		if ( !this.hasHorizontalScroll ) {
 			this.maxScrollX = 0;
 			this.scrollerWidth = this.wrapperWidth;
@@ -423,7 +424,7 @@ IScroll.prototype = {
 		this.endTime = 0;
 		this.directionX = 0;
 		this.directionY = 0;
-		
+
 		if(utils.hasPointer && !this.options.disablePointer) {
 			// The wrapper should have `touchAction` property for using pointerEvent.
 			this.wrapper.style[utils.style.touchAction] = utils.getTouchAction(this.options.eventPassthrough, true);
@@ -442,7 +443,7 @@ IScroll.prototype = {
 
 // INSERT POINT: _refresh
 
-	},	
+	},
 
 	on: function (type, fn) {
 		if ( !this._events[type] ) {
@@ -631,6 +632,12 @@ IScroll.prototype = {
 		eventType(this.scroller, 'webkitTransitionEnd', this);
 		eventType(this.scroller, 'oTransitionEnd', this);
 		eventType(this.scroller, 'MSTransitionEnd', this);
+
+		// https://github.com/cubiq/iscroll/issues/603
+		if (this.options.preventNativeScrollTab) {
+			eventType(this.wrapper, 'scroll', this._preventScrollBug.bind(this));
+			eventType(this.wrapper, 'keyup', this._scrollTab.bind(this), true);
+		}
 	},
 
 	getComputedPosition: function () {
@@ -647,4 +654,36 @@ IScroll.prototype = {
 		}
 
 		return { x: x, y: y };
+	},
+
+	_isDescendant: function (parent, child) {
+		var node = child.parentNode;
+		while (node != null) {
+			if (node == parent) {
+				return true;
+			}
+			node = node.parentNode;
+		}
+		return false;
+	},
+
+	_preventScrollBug: function () {
+		var holder = this;
+		var element = document.activeElement;
+		if (!this._isDescendant(holder.wrapper, element)) return false;
+		holder.scrollTo(holder.maxScrollX, holder.maxScrollY);
+		setTimeout(function() { holder.scrollTo(0, 0);}, 1);
+		setTimeout(function() { if (element != null && element !== document.body) holder.scrollToElement(element, null, null, true);}, 2);
+	},
+
+	_scrollTab: function (e) {
+		var holder = this;
+		var keyCode = e.keyCode || e.which;
+		if (keyCode == 9) {
+			var element = document.activeElement;
+			if (!this._isDescendant(holder.wrapper, element)) return false;
+			setTimeout(function() {
+				if (element != null && element !== document.body) holder.scrollToElement(element, null, null, true);
+			}, 2);
+		}
 	},
