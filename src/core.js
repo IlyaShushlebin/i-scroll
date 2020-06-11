@@ -17,6 +17,7 @@ function IScroll (el, options) {
 		momentum: true,
 
 		bounce: true,
+		bounceLock: false,
 		bounceTime: 600,
 		bounceEasing: '',
 
@@ -379,7 +380,7 @@ IScroll.prototype = {
 		}
 
 		this.scrollTo(x, y, time, this.options.bounceEasing);
-
+		this._execEvent('reset');
 		return true;
 	},
 
@@ -420,6 +421,8 @@ IScroll.prototype = {
 			this.maxScrollY = 0;
 			this.scrollerHeight = this.wrapperHeight;
 		}
+
+		this.hasVerticalScroll		= this.hasVerticalScroll || this.options.bounceLock;
 
 		this.endTime = 0;
 		this.directionX = 0;
