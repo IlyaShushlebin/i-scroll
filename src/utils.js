@@ -52,8 +52,9 @@ var utils = (function () {
 	};
 
 	me.momentum = function (current, start, time, lowerMargin, wrapperSize, deceleration) {
-		var distance = current - start,
-			speed = Math.abs(distance) / time,
+		var t = time || 1,
+			distance = current - start,
+			speed = Math.abs(distance) / t,
 			destination,
 			duration;
 
