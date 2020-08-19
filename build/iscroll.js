@@ -1,4 +1,4 @@
-/*! iScroll v5.2.3 ~ (c) 2008-2020 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.2.4 ~ (c) 2008-2020 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -54,8 +54,9 @@ var utils = (function () {
 	};
 
 	me.momentum = function (current, start, time, lowerMargin, wrapperSize, deceleration) {
-		var distance = current - start,
-			speed = Math.abs(distance) / time,
+		var t = time || 1,
+			distance = current - start,
+			speed = Math.abs(distance) / t,
 			destination,
 			duration;
 
@@ -314,6 +315,7 @@ var utils = (function () {
 
 	return me;
 })();
+
 function IScroll (el, options) {
 	this.wrapper = typeof el == 'string' ? document.querySelector(el) : el;
 	this.scroller = this.wrapper.children[0];
@@ -413,7 +415,7 @@ function IScroll (el, options) {
 }
 
 IScroll.prototype = {
-	version: '5.2.3',
+	version: '5.2.4',
 
 	_init: function () {
 		this._initEvents();
@@ -627,7 +629,7 @@ IScroll.prototype = {
 		var point = e.changedTouches ? e.changedTouches[0] : e,
 			momentumX,
 			momentumY,
-			duration = utils.getTime() - this.startTime,
+			duration = (utils.getTime() - this.startTime) || 1,
 			newX = Math.round(this.x),
 			newY = Math.round(this.y),
 			distanceX = Math.abs(newX - this.startX),
