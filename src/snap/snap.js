@@ -1,10 +1,14 @@
 
 	_initSnap: function () {
 		this.currentPage = {};
-
+		
 		if ( typeof this.options.snap == 'string' ) {
-			this.options.snap = this.scroller.querySelectorAll(this.options.snap);
+			this.options.snapSelector = this.options.snap;
+		} else {
+			this.options.snapSelector = null;
 		}
+
+		this._querySnapElements();
 
 		this.on('refresh', function () {
 			var i = 0, l,
@@ -21,6 +25,8 @@
 			if ( !this.wrapperWidth || !this.wrapperHeight || !this.scrollerWidth || !this.scrollerHeight ) {
 				return;
 			}
+			
+			this._querySnapElements();
 
 			if ( this.options.snap === true ) {
 				cx = Math.round( stepX / 2 );
@@ -109,6 +115,12 @@
 				time
 			);
 		});
+	},
+		
+	_querySnapElements: function() {
+		if (typeof this.options.snapSelector == 'string') {
+			this.options.snap = this.scroller.querySelectorAll(this.options.snapSelector);
+		}
 	},
 
 	_nearestSnap: function (x, y) {
