@@ -1,4 +1,4 @@
-/*! iScroll v5.2.4 ~ (c) 2008-2020 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.3.0 ~ (c) 2008-2020 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -420,7 +420,7 @@ function IScroll (el, options) {
 }
 
 IScroll.prototype = {
-	version: '5.2.4',
+	version: '5.3.0',
 
 	_init: function () {
 		this._initEvents();
@@ -1183,10 +1183,14 @@ IScroll.prototype = {
 
 	_initSnap: function () {
 		this.currentPage = {};
-
+		
 		if ( typeof this.options.snap == 'string' ) {
-			this.options.snap = this.scroller.querySelectorAll(this.options.snap);
+			this.options.snapSelector = this.options.snap;
+		} else {
+			this.options.snapSelector = null;
 		}
+
+		this._querySnapElements();
 
 		this.on('refresh', function () {
 			var i = 0, l,
@@ -1203,6 +1207,8 @@ IScroll.prototype = {
 			if ( !this.wrapperWidth || !this.wrapperHeight || !this.scrollerWidth || !this.scrollerHeight ) {
 				return;
 			}
+			
+			this._querySnapElements();
 
 			if ( this.options.snap === true ) {
 				cx = Math.round( stepX / 2 );
@@ -1291,6 +1297,12 @@ IScroll.prototype = {
 				time
 			);
 		});
+	},
+		
+	_querySnapElements: function() {
+		if (typeof this.options.snapSelector == 'string') {
+			this.options.snap = this.scroller.querySelectorAll(this.options.snapSelector);
+		}
 	},
 
 	_nearestSnap: function (x, y) {

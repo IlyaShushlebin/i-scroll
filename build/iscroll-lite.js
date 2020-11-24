@@ -1,4 +1,4 @@
-/*! iScroll v5.2.4 ~ (c) 2008-2020 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.3.0 ~ (c) 2008-2020 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -403,7 +403,7 @@ function IScroll (el, options) {
 }
 
 IScroll.prototype = {
-	version: '5.2.4',
+	version: '5.3.0',
 
 	_init: function () {
 		this._initEvents();
