@@ -17,6 +17,7 @@ function IScroll (el, options) {
 		momentum: true,
 
 		bounce: true,
+		bounceDeltaScale: 3,
 		bounceLock: false,
 		bounceTime: 600,
 		bounceEasing: '',
@@ -98,7 +99,7 @@ IScroll.prototype = {
 	destroy: function () {
 		this._initEvents(true);
 		clearTimeout(this.resizeTimeout);
- 		this.resizeTimeout = null;
+		this.resizeTimeout = null;
 		this._execEvent('destroy');
 	},
 
@@ -117,17 +118,17 @@ IScroll.prototype = {
 	_start: function (e) {
 		// React to left mouse button only
 		if ( utils.eventType[e.type] != 1 ) {
-		  // for button property
-		  // http://unixpapa.com/js/mouse.html
-		  var button;
-	    if (!e.which) {
-	      /* IE case */
-	      button = (e.button < 2) ? 0 :
-	               ((e.button == 4) ? 1 : 2);
-	    } else {
-	      /* All others */
-	      button = e.button;
-	    }
+			// for button property
+			// http://unixpapa.com/js/mouse.html
+			var button;
+			if (!e.which) {
+				/* IE case */
+				button = (e.button < 2) ? 0 :
+					((e.button == 4) ? 1 : 2);
+			} else {
+				/* All others */
+				button = e.button;
+			}
 			if ( button !== 0 ) {
 				return;
 			}
@@ -243,10 +244,10 @@ IScroll.prototype = {
 
 		// Slow down if outside of the boundaries
 		if ( newX > 0 || newX < this.maxScrollX ) {
-			newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
+			newX = this.options.bounce ? this.x + deltaX / this.options.bounceDeltaScale : newX > 0 ? 0 : this.maxScrollX;
 		}
 		if ( newY > 0 || newY < this.maxScrollY ) {
-			newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
+			newY = this.options.bounce ? this.y + deltaY / this.options.bounceDeltaScale : newY > 0 ? 0 : this.maxScrollY;
 		}
 
 		this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
@@ -260,7 +261,7 @@ IScroll.prototype = {
 
 		this._translate(newX, newY);
 
-/* REPLACE START: _move */
+		/* REPLACE START: _move */
 
 		if ( timestamp - this.startTime > 300 ) {
 			this.startTime = timestamp;
@@ -268,7 +269,7 @@ IScroll.prototype = {
 			this.startY = this.y;
 		}
 
-/* REPLACE END: _move */
+		/* REPLACE END: _move */
 
 	},
 
@@ -399,7 +400,7 @@ IScroll.prototype = {
 		this.wrapperHeight	= this.wrapper.clientHeight;
 
 		var rect = utils.getRect(this.scroller);
-/* REPLACE START: refresh */
+		/* REPLACE START: refresh */
 
 		this.scrollerWidth	= rect.width;
 		this.scrollerHeight	= rect.height;
@@ -407,7 +408,7 @@ IScroll.prototype = {
 		this.maxScrollX		= this.wrapperWidth - this.scrollerWidth;
 		this.maxScrollY		= this.wrapperHeight - this.scrollerHeight;
 
-/* REPLACE END: refresh */
+		/* REPLACE END: refresh */
 
 		this.hasHorizontalScroll	= this.options.scrollX && this.maxScrollX < 0;
 		this.hasVerticalScroll		= this.options.scrollY && this.maxScrollY < 0;
@@ -499,10 +500,10 @@ IScroll.prototype = {
 		this.isInTransition = this.options.useTransition && time > 0;
 		var transitionType = this.options.useTransition && easing.style;
 		if ( !time || transitionType ) {
-				if(transitionType) {
-					this._transitionTimingFunction(easing.style);
-					this._transitionTime(time);
-				}
+			if(transitionType) {
+				this._transitionTimingFunction(easing.style);
+				this._transitionTime(time);
+			}
 			this._translate(x, y);
 		} else {
 			this._animate(x, y, time, easing.fn);
@@ -579,11 +580,11 @@ IScroll.prototype = {
 	_translate: function (x, y) {
 		if ( this.options.useTransform ) {
 
-/* REPLACE START: _translate */
+			/* REPLACE START: _translate */
 
 			this.scrollerStyle[utils.style.transform] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
 
-/* REPLACE END: _translate */
+			/* REPLACE END: _translate */
 
 		} else {
 			x = Math.round(x);
