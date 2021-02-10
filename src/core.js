@@ -31,6 +31,9 @@ function IScroll (el, options) {
 		preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ },
 		preventNativeScrollTab: true,
 
+		useScrollableElements: false,
+		scrollableElementTest: { className: /^(scrollable)$/ },
+
 		HWCompositing: true,
 		useTransition: true,
 		useTransform: true,
@@ -140,6 +143,10 @@ IScroll.prototype = {
 		}
 
 		if ( !this.enabled || (this.initiated && utils.eventType[e.type] !== this.initiated) ) {
+			return;
+		}
+
+		if (this.options.useScrollableElements && !utils.preventDefaultException(e.target, this.options.scrollableElementTest) ) {
 			return;
 		}
 
