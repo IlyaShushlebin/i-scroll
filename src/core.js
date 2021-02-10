@@ -18,6 +18,10 @@ function IScroll (el, options) {
 
 		bounce: true,
 		bounceDeltaScale: 3,
+		zeroXBounceLock: false,
+		maxXBounceLock: false,
+		zeroYBounceLock: false,
+		maxYBounceLock: false,
 		bounceLock: false,
 		bounceTime: 600,
 		bounceEasing: '',
@@ -243,11 +247,36 @@ IScroll.prototype = {
 		newY = this.y + deltaY;
 
 		// Slow down if outside of the boundaries
-		if ( newX > 0 || newX < this.maxScrollX ) {
-			newX = this.options.bounce ? this.x + deltaX / this.options.bounceDeltaScale : newX > 0 ? 0 : this.maxScrollX;
+		if ( newX > 0) {
+			if(this.options.bounce && !this.options.zeroXBounceLock) {
+				newX = this.x + deltaX / this.options.bounceDeltaScale;
+			} else {
+				newX = 0;
+			}
 		}
-		if ( newY > 0 || newY < this.maxScrollY ) {
-			newY = this.options.bounce ? this.y + deltaY / this.options.bounceDeltaScale : newY > 0 ? 0 : this.maxScrollY;
+
+		if ( newX < this.maxScrollX) {
+			if(this.options.bounce && !this.options.maxXBounceLock) {
+				newX = this.x + deltaX / this.options.bounceDeltaScale;
+			} else {
+				newX = this.maxScrollX;
+			}
+		}
+
+		if ( newY > 0) {
+			if(this.options.bounce && !this.options.zeroYBounceLock) {
+				newY = this.y + deltaY / this.options.bounceDeltaScale;
+			} else {
+				newY = 0;
+			}
+		}
+
+		if ( newY < this.maxScrollY) {
+			if(this.options.bounce && !this.options.maxYBounceLock) {
+				newY = this.y + deltaY / this.options.bounceDeltaScale;
+			} else {
+				newY = this.maxScrollY;
+			}
 		}
 
 		this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
