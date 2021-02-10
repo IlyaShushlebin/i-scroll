@@ -22,6 +22,7 @@ function IScroll (el, options) {
 		maxXBounceLock: false,
 		zeroYBounceLock: false,
 		maxYBounceLock: false,
+		resetPositionForOutside: true,
 		bounceLock: false,
 		bounceTime: 600,
 		bounceEasing: '',
@@ -327,7 +328,7 @@ IScroll.prototype = {
 		this.endTime = utils.getTime();
 
 		// reset if we are outside of the boundaries
-		if ( this.resetPosition(this.options.bounceTime) ) {
+		if ( this.options.resetPositionForOutside && this.resetPosition(this.options.bounceTime) ) {
 			return;
 		}
 
