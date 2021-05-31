@@ -1,4 +1,4 @@
-/*! iScroll v5.3.1 ~ (c) 2008-2021 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.3.2 ~ (c) 2008-2021 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -329,6 +329,7 @@ function IScroll (el, options) {
 		resizeScrollbars: true,
 
 		mouseWheelSpeed: 20,
+		mouseWheelSpeedFactor: 1,
 
 		snapThreshold: 0.334,
 
@@ -429,7 +430,7 @@ function IScroll (el, options) {
 }
 
 IScroll.prototype = {
-	version: '5.3.1',
+	version: '5.3.2',
 
 	_init: function () {
 		this._initEvents();
@@ -1451,8 +1452,8 @@ IScroll.prototype = {
 			return;
 		}
 
-		wheelDeltaX *= this.options.invertWheelDirection;
-		wheelDeltaY *= this.options.invertWheelDirection;
+		wheelDeltaX *= (this.options.invertWheelDirection * this.options.mouseWheelSpeedFactor);
+		wheelDeltaY *= (this.options.invertWheelDirection * this.options.mouseWheelSpeedFactor);
 
 		if ( !this.hasVerticalScroll ) {
 			wheelDeltaX = wheelDeltaY;
