@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+<title>iScroll demo: zoom</title>
+
+<script type="text/javascript" src="../../build/iscroll-zoom.js"></script>
+<script type="text/javascript" src="../demoUtils.js"></script>
+<script type="text/javascript">
+
+var myScroll;
+
+function loaded () {
+	myScroll = new IScroll('#wrapper', {
+		scrollY: true,
+		scrollbars: true,
+		mouseWheel: true,
+	});
+}
+
+function focusToId(id) {
+	debugger
+	var element = document.getElementById(id);
+	element.focus();
+}
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, isPassive() ? {
+	capture: false,
+	passive: false
+} : false);
+
+</script>
+
+<style type="text/css">
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+	-ms-touch-action: none;
+}
+
+body,ul,li {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+body {
+	font-size: 12px;
+	font-family: ubuntu, helvetica, arial;
+	overflow: hidden; /* this is important to prevent the whole page to bounce */
+}
+
+#wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 80px;
+	bottom: 50px;
+	left: 50px;
+	right: 50px;
+	background: #ccc;
+	overflow: hidden;
+}
+
+#scroller {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
+#scroller ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	text-align: left;
+}
+
+#scroller li {
+	padding: 0 10px;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #fff;
+	background-color: #fafafa;
+	font-size: 14px;
+}
+
+</style>
+</head>
+<body onload="loaded()">
+<div>
+	<p>Фокус: </p>
+	<button onclick="focusToId(10)">10</button>
+	<button onclick="focusToId(20)">20</button>
+	<button onclick="focusToId(30)">30</button>
+	<button onclick="focusToId(40)">40</button>
+	<button onclick="focusToId(50)">50</button>
+	<button onclick="focusToId(60)">60</button>
+</div>
+<div id="wrapper">
+	<div id="scroller">
+		<ul>
+			<li><button id="1">Pretty row 1</button></li>
+			<li><button id="2">Pretty row 2</button></li>
+			<li><button id="3">Pretty row 3</button></li>
+			<li><button id="4">Pretty row 4</button></li>
+			<li><button id="5">Pretty row 5</button></li>
+			<li><button id="6">Pretty row 6</button></li>
+			<li><button id="7">Pretty row 7</button></li>
+			<li><button id="8">Pretty row 8</button></li>
+			<li><button id="9">Pretty row 9</button></li>
+			<li><button id="10">Pretty row 10</button></li>
+			<li><button id="11">Pretty row 11</button></li>
+			<li><button id="12">Pretty row 12</button></li>
+			<li><button id="13">Pretty row 13</button></li>
+			<li><button id="14">Pretty row 14</button></li>
+			<li><button id="15">Pretty row 15</button></li>
+			<li><button id="16">Pretty row 16</button></li>
+			<li><button id="17">Pretty row 17</button></li>
+			<li><button id="18">Pretty row 18</button></li>
+			<li><button id="19">Pretty row 19</button></li>
+			<li><button id="20">Pretty row 20</button></li>
+			<li><button id="21">Pretty row 21</button></li>
+			<li><button id="22">Pretty row 22</button></li>
+			<li><button id="23">Pretty row 23</button></li>
+			<li><button id="24">Pretty row 24</button></li>
+			<li><button id="25">Pretty row 25</button></li>
+			<li><button id="26">Pretty row 26</button></li>
+			<li><button id="27">Pretty row 27</button></li>
+			<li><button id="28">Pretty row 28</button></li>
+			<li><button id="29">Pretty row 29</button></li>
+			<li><button id="30">Pretty row 30</button></li>
+			<li><button id="31">Pretty row 31</button></li>
+			<li><button id="32">Pretty row 32</button></li>
+			<li><button id="33">Pretty row 33</button></li>
+			<li><button id="34">Pretty row 34</button></li>
+			<li><button id="35">Pretty row 35</button></li>
+			<li><button id="36">Pretty row 36</button></li>
+			<li><button id="37">Pretty row 37</button></li>
+			<li><button id="38">Pretty row 38</button></li>
+			<li><button id="39">Pretty row 39</button></li>
+			<li><button id="40">Pretty row 40</button></li>
+			<li><button id="41">Pretty row 41</button></li>
+			<li><button id="42">Pretty row 42</button></li>
+			<li><button id="43">Pretty row 43</button></li>
+			<li><button id="44">Pretty row 44</button></li>
+			<li><button id="45">Pretty row 45</button></li>
+			<li><button id="46">Pretty row 46</button></li>
+			<li><button id="47">Pretty row 47</button></li>
+			<li><button id="48">Pretty row 48</button></li>
+			<li><button id="49">Pretty row 49</button></li>
+			<li><button id="50">Pretty row 50</button></li>
+			<li><button id="51">Pretty row 51</button></li>
+			<li><button id="52">Pretty row 52</button></li>
+			<li><button id="53">Pretty row 53</button></li>
+			<li><button id="54">Pretty row 54</button></li>
+			<li><button id="55">Pretty row 55</button></li>
+			<li><button id="56">Pretty row 56</button></li>
+			<li><button id="57">Pretty row 57</button></li>
+			<li><button id="58">Pretty row 58</button></li>
+			<li><button id="59">Pretty row 59</button></li>
+			<li><button id="60">Pretty row 60</button></li>
+		</ul>
+	</div>
+</div>
+
+</body>
+</html>

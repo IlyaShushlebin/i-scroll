@@ -1,4 +1,4 @@
-/*! iScroll v5.3.2 ~ (c) 2008-2021 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.2.0-snapshot ~ (c) 2008-2021 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -347,6 +347,7 @@ function IScroll (el, options) {
 		preventDefault: true,
 		preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ },
 		preventNativeScrollTab: true,
+		preventScrollTimeoutTime: 1000,
 
 		useScrollableElements: false,
 		scrollableElementTest: { className: /^(scrollable)$/ },
@@ -412,7 +413,7 @@ function IScroll (el, options) {
 }
 
 IScroll.prototype = {
-	version: '5.3.2',
+	version: '5.2.0-snapshot',
 
 	_init: function () {
 		this._initEvents();
@@ -993,6 +994,9 @@ IScroll.prototype = {
 
 		// https://github.com/cubiq/iscroll/issues/603
 		if (this.options.preventNativeScrollTab) {
+			this.preventScrollLocked = false;
+			this.preventScrollTimeout = null;
+
 			eventType(this.wrapper, 'scroll', this._preventScrollBug.bind(this));
 			eventType(this.wrapper, 'keyup', this._scrollTab.bind(this), true);
 		}
@@ -1027,11 +1031,24 @@ IScroll.prototype = {
 
 	_preventScrollBug: function () {
 		var holder = this;
+		if(true === holder.preventScrollLocked){
+			return false;
+		}
+		holder.preventScrollLocked = true;
+
 		var element = document.activeElement;
 		if (!this._isDescendant(holder.wrapper, element)) return false;
+
+		var topPosition = holder.y;
+
 		holder.scrollTo(holder.maxScrollX, holder.maxScrollY);
-		setTimeout(function() { holder.scrollTo(0, 0);}, 1);
+		setTimeout(function() { holder.scrollTo(0, topPosition);}, 1);
 		setTimeout(function() { if (element != null && element !== document.body) holder.scrollToElement(element, null, null, true);}, 2);
+
+		clearTimeout(holder.preventScrollTimeout);
+		holder.preventScrollTimeout = setTimeout(function(){
+			holder.preventScrollLocked = false;
+		}, holder.options.preventScrollTimeoutTime);
 	},
 
 	_scrollTab: function (e) {
