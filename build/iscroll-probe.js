@@ -469,7 +469,7 @@ IScroll.prototype = {
 		this._transitionTime();
 		if ( !this.resetPosition(this.options.bounceTime) ) {
 			this.isInTransition = false;
-			this._execEvent('scrollEnd');
+			this._execEvent('scrollEnd', e);
 		}
 	},
 
@@ -522,10 +522,10 @@ IScroll.prototype = {
 			this.isInTransition = false;
 			pos = this.getComputedPosition();
 			this._translate(Math.round(pos.x), Math.round(pos.y));
-			this._execEvent('scrollEnd');
+			this._execEvent('scrollEnd', e);
 		} else if ( !this.options.useTransition && this.isAnimating ) {
 			this.isAnimating = false;
-			this._execEvent('scrollEnd');
+			this._execEvent('scrollEnd', e);
 		}
 
 		this.startX    = this.x;
@@ -535,7 +535,7 @@ IScroll.prototype = {
 		this.pointX    = point.pageX;
 		this.pointY    = point.pageY;
 
-		this._execEvent('beforeScrollStart');
+		this._execEvent('beforeScrollStart', e);
 	},
 
 	_move: function (e) {
@@ -641,7 +641,7 @@ IScroll.prototype = {
 		this.directionY = deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0;
 
 		if ( !this.moved ) {
-			this._execEvent('scrollStart');
+			this._execEvent('scrollStart', e);
 		}
 
 		this.moved = true;
@@ -655,12 +655,12 @@ IScroll.prototype = {
 			this.startY = this.y;
 
 			if ( this.options.probeType == 1 ) {
-				this._execEvent('scroll');
+				this._execEvent('scroll', e);
 			}
 		}
 
 		if ( this.options.probeType > 1 ) {
-			this._execEvent('scroll');
+			this._execEvent('scroll', e);
 		}
 /* REPLACE END: _move */
 
@@ -707,12 +707,12 @@ IScroll.prototype = {
 				utils.click(e);
 			}
 
-			this._execEvent('scrollCancel');
+			this._execEvent('scrollCancel', e);
 			return;
 		}
 
 		if ( this._events.flick && duration < 200 && distanceX < 100 && distanceY < 100 ) {
-			this._execEvent('flick');
+			this._execEvent('flick', e);
 			return;
 		}
 
@@ -755,7 +755,7 @@ IScroll.prototype = {
 			return;
 		}
 
-		this._execEvent('scrollEnd');
+		this._execEvent('scrollEnd', e);
 	},
 
 	_resize: function () {
@@ -879,7 +879,7 @@ IScroll.prototype = {
 		}
 	},
 
-	_execEvent: function (type) {
+	_execEvent: function (type, event) {
 		if ( !this._events[type] ) {
 			return;
 		}
@@ -892,7 +892,7 @@ IScroll.prototype = {
 		}
 
 		for ( ; i < l; i++ ) {
-			this._events[type][i].apply(this, [].slice.call(arguments, 1));
+			this._events[type][i].apply(this, [].slice.call(arguments, 1).concat(event));
 		}
 	},
 
@@ -1355,7 +1355,7 @@ IScroll.prototype = {
 		this.scrollTo(newX, newY, 0);
 
 		if ( this.options.probeType > 1 ) {
-			this._execEvent('scroll');
+			this._execEvent('scroll', e);
 		}
 
 // INSERT POINT: _wheel
@@ -1363,7 +1363,7 @@ IScroll.prototype = {
 
 	_initSnap: function () {
 		this.currentPage = {};
-		
+
 		if ( typeof this.options.snap == 'string' ) {
 			this.options.snapSelector = this.options.snap;
 		} else {
@@ -1387,7 +1387,7 @@ IScroll.prototype = {
 			if ( !this.wrapperWidth || !this.wrapperHeight || !this.scrollerWidth || !this.scrollerHeight ) {
 				return;
 			}
-			
+
 			this._querySnapElements();
 
 			if ( this.options.snap === true ) {
@@ -1478,7 +1478,7 @@ IScroll.prototype = {
 			);
 		});
 	},
-		
+
 	_querySnapElements: function() {
 		if (typeof this.options.snapSelector == 'string') {
 			this.options.snap = this.scroller.querySelectorAll(this.options.snapSelector);
@@ -1760,7 +1760,7 @@ IScroll.prototype = {
 			if ( now >= destTime ) {
 				that.isAnimating = false;
 				that._translate(destX, destY);
-				
+
 				if ( !that.resetPosition(that.options.bounceTime) ) {
 					that._execEvent('scrollEnd');
 				}
