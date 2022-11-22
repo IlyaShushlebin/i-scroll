@@ -175,7 +175,7 @@ Indicator.prototype = {
 			utils.addEvent(window, 'mousemove', this);
 		}
 
-		this.scroller._execEvent('beforeScrollStart');
+		this.scroller._execEvent('beforeScrollStart', e);
 	},
 
 	_move: function (e) {
@@ -185,7 +185,7 @@ Indicator.prototype = {
 			timestamp = utils.getTime();
 
 		if ( !this.moved ) {
-			this.scroller._execEvent('scrollStart');
+			this.scroller._execEvent('scrollStart', e);
 		}
 
 		this.moved = true;
@@ -239,7 +239,7 @@ Indicator.prototype = {
 		}
 
 		if ( this.moved ) {
-			this.scroller._execEvent('scrollEnd');
+			this.scroller._execEvent('scrollEnd', e);
 		}
 	},
 

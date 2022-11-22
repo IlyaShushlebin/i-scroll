@@ -25,14 +25,14 @@
 			that = this;
 
 		if ( this.wheelTimeout === undefined ) {
-			that._execEvent('scrollStart');
+			that._execEvent('scrollStart', e);
 		}
 
 		// Execute the scrollEnd event after 400ms the wheel stopped scrolling
 		clearTimeout(this.wheelTimeout);
 		this.wheelTimeout = setTimeout(function () {
 			if(!that.options.snap) {
-				that._execEvent('scrollEnd');
+				that._execEvent('scrollEnd', e);
 			}
 			that.wheelTimeout = undefined;
 		}, 400);

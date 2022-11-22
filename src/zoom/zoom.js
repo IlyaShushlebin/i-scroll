@@ -13,7 +13,7 @@
 		this.originX = Math.abs(e.touches[0].pageX + e.touches[1].pageX) / 2 + this.wrapperOffset.left - this.x;
 		this.originY = Math.abs(e.touches[0].pageY + e.touches[1].pageY) / 2 + this.wrapperOffset.top - this.y;
 
-		this._execEvent('zoomStart');
+		this._execEvent('zoomStart', e);
 	},
 
 	_zoom: function (e) {
@@ -96,7 +96,7 @@
 
 		this.scaled = false;
 
-		this._execEvent('zoomEnd');
+		this._execEvent('zoomEnd', e);
 	},
 
 	zoom: function (scale, x, y, time) {
@@ -149,7 +149,7 @@
 		// Execute the zoomEnd event after 400ms the wheel stopped scrolling
 		clearTimeout(this.wheelTimeout);
 		this.wheelTimeout = setTimeout(function () {
-			that._execEvent('zoomEnd');
+			that._execEvent('zoomEnd', e);
 		}, 400);
 
 		if ( 'deltaX' in e ) {

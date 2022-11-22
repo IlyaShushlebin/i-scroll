@@ -5,10 +5,10 @@
 			this.startY = this.y;
 
 			if ( this.options.probeType == 1 ) {
-				this._execEvent('scroll');
+				this._execEvent('scroll', e);
 			}
 		}
 
 		if ( this.options.probeType > 1 ) {
-			this._execEvent('scroll');
+			this._execEvent('scroll', e);
 		}
